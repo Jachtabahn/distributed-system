@@ -1,6 +1,7 @@
+import netifaces
 import socket
 import threading
-import netifaces
+import time
 
 endpoint = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 endpoint.bind(("0.0.0.0", 9999))
@@ -25,7 +26,6 @@ for (address, name) in iface_addrs:
   print("{}:".format(name), "{}:{}".format(address, local_port))
 
 def receive():
-  print("RECEIVE")
   event = endpoint.recvfrom(1024)
   print("Message:", event[0].decode())
   print("Originator:", "{}:{}".format(*event[1]))
@@ -41,4 +41,10 @@ while True:
   port = int(port_string)
 
   message = input("Enter data to send to that endpoint: ")
-  endpoint.sendto(message.encode(), (address, port))
+
+  many_times_text = input("Enter how many times to send that data: ")
+  many_times = int(many_times_text)
+
+  for _ in range(many_times):
+    endpoint.sendto(message.encode(), (address, port))
+    time.sleep(0.001)
