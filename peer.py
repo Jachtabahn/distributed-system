@@ -26,10 +26,11 @@ for (address, name) in iface_addrs:
   print("{}:".format(name), "{}:{}".format(address, local_port))
 
 def receive():
-  event = endpoint.recvfrom(1024)
-  print("Message:", event[0].decode())
-  print("Originator:", "{}:{}".format(*event[1]))
-  print("----------------------------------")
+  while True:
+    event = endpoint.recvfrom(1024)
+    print("Message:", event[0].decode())
+    print("Originator:", "{}:{}".format(*event[1]))
+    print("----------------------------------")
 
 receive_thread = threading.Thread(target=receive)
 receive_thread.start()
